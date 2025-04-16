@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_app/business/models/note_model.dart';
 import 'package:notes_app/business/providers/notes_provider.dart';
+import 'package:notes_app/presentation/widgets/custom_list_card.dart';
 import 'package:notes_app/presentation/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -48,9 +50,15 @@ class HomePage extends StatelessWidget {
                 itemCount: noteProvider.noteList.length,
                 itemBuilder: (context, index) {
                   final note = noteProvider.noteList[index];
-                  return ListTile(
-                    title: Text(note.title),
-                    subtitle: Text(note.content),
+
+                  return CustomListCard(
+                    title: note.title,
+                    subtitle: note.content,
+                    date: DateFormat(
+                      'dd/MM/yyyy HH:mm',
+                    ).format(note.lastEdited),
+                    onEdit: () {},
+                    onDelete: () {},
                   );
                 },
               ),
@@ -82,7 +90,7 @@ class HomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CustomTextField(hint: "Titulo", controller: titleController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomTextField(
                   hint: "Contenido",
                   controller: contentController,
