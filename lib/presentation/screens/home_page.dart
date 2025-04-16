@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/business/providers/notes_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -24,11 +26,15 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text(
-          "Tu bandeja de notas esta vacia.",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+      body: Consumer<NotesProvider>(
+        builder: (context, noteProvider, child) {
+          return const Center(
+            child: Text(
+              "Tu bandeja de notas esta vacia.",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -41,6 +47,7 @@ class HomePage extends StatelessWidget {
   }
 
   void showAddNoteDialog(BuildContext context) {
+    final notesProvider = Provider.of<NotesProvider>(context, listen: false);
     showDialog(
       context: context,
       builder:
@@ -65,7 +72,6 @@ class HomePage extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  //TODO: Agregar nota
                   Navigator.pop(context);
                 },
                 child: const Text(

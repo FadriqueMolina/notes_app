@@ -5,13 +5,13 @@ class NotesProvider with ChangeNotifier {
   //TODO: En la siguiente actualizacion voy a migrar este provider al uso de Supabase
 
   //Lista de notas
-  List<Note> _noteList = [];
+  final List<Note> _noteList = [];
 
   List<Note> get noteList => _noteList;
 
   //Agregar una nota
-  void addNote(Note note) {
-    _noteList.add(note);
+  void addNote(Note noteToAdd) {
+    _noteList.add(noteToAdd);
     notifyListeners();
   }
 
