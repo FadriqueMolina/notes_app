@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:notes_app/business/models/note_model.dart';
 import 'package:notes_app/business/providers/notes_provider.dart';
 import 'package:notes_app/presentation/widgets/custom_list_card.dart';
@@ -54,9 +53,7 @@ class HomePage extends StatelessWidget {
                   return CustomListCard(
                     title: note.title,
                     subtitle: note.content,
-                    date: DateFormat(
-                      'dd/MM/yyyy HH:mm',
-                    ).format(note.lastEdited),
+                    date: note.lastEdited,
                     onEdit: () {},
                     onDelete: () {},
                   );
