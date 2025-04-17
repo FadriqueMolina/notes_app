@@ -141,7 +141,6 @@ class HomePage extends StatelessWidget {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    //TODO: Crear un form para validar las entradas para el titulo y el contenido
     showDialog(
       context: context,
       builder:
@@ -204,13 +203,12 @@ class HomePage extends StatelessWidget {
 
   void showDeleteNoteDialog(BuildContext context, String id) {
     final notesProvider = Provider.of<NotesProvider>(context, listen: false);
-    //TODO: Crear un form para validar las entradas para el titulo y el contenido
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
             title: const Text("Borrar nota"),
-            content: Text("Deseas eliminar definitivamente la nota?"),
+            content: const Text("Deseas eliminar definitivamente la nota?"),
 
             actions: [
               TextButton(
