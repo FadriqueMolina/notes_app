@@ -4,11 +4,13 @@ class CustomTextField extends StatefulWidget {
   final String hint;
   final TextEditingController controller;
   final String? formerText;
+  final bool isObscured;
   const CustomTextField({
     super.key,
     required this.hint,
     required this.controller,
     this.formerText,
+    this.isObscured = false,
   });
 
   @override
@@ -35,6 +37,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       child: TextFormField(
+        obscureText: widget.isObscured,
         controller: widget.controller,
         decoration: InputDecoration(
           hintText: widget.hint,
