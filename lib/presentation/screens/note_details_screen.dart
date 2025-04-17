@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app/business/models/note_model.dart';
-import 'package:notes_app/business/providers/notes_provider.dart';
-import 'package:provider/provider.dart';
 
 class NoteDetailsScreen extends StatelessWidget {
   final Note currentNote;
