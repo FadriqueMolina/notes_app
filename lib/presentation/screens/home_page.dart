@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
                     subtitle: note.content,
                     date: note.lastEdited,
                     onEdit: () {
-                      showUpdateNoteDialog(context, note.id);
+                      showUpdateNoteDialog(context, note);
                     },
                     onDelete: () {
                       showDeleteNoteDialog(context, note.id);
@@ -84,6 +84,7 @@ class HomePage extends StatelessWidget {
     //TODO: Crear un form para validar las entradas para el titulo y el contenido
     showDialog(
       context: context,
+
       builder:
           (context) => AlertDialog(
             title: const Text("Agregar nota"),
@@ -129,7 +130,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void showUpdateNoteDialog(BuildContext context, String id) {
+  void showUpdateNoteDialog(BuildContext context, Note note) {
     final notesProvider = Provider.of<NotesProvider>(context, listen: false);
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
@@ -142,11 +143,16 @@ class HomePage extends StatelessWidget {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomTextField(hint: "Titulo", controller: titleController),
+                CustomTextField(
+                  hint: "Titulo",
+                  controller: titleController,
+                  formerText: note.title,
+                ),
                 const SizedBox(height: 10),
                 CustomTextField(
                   hint: "Contenido",
                   controller: contentController,
+                  formerText: note.content,
                 ),
               ],
             ),
@@ -168,7 +174,7 @@ class HomePage extends StatelessWidget {
                     content: contentController.text,
                     lastEdited: DateTime.now(),
                   );
-                  notesProvider.updateNote(id, noteToAdd);
+                  notesProvider.updateNote(note.id, noteToAdd);
                   Navigator.pop(context);
                 },
                 child: const Text(
