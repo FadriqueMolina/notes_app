@@ -7,6 +7,7 @@ class CustomListCard extends StatelessWidget {
   final DateTime date; // Added date field
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback onTap;
 
   const CustomListCard({
     super.key,
@@ -15,6 +16,7 @@ class CustomListCard extends StatelessWidget {
     required this.date, // Required date
     required this.onEdit,
     required this.onDelete,
+    required this.onTap,
   });
 
   @override
@@ -23,6 +25,7 @@ class CustomListCard extends StatelessWidget {
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
+        onTap: onTap,
         //Titulo de la nota
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Column(
