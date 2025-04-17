@@ -54,8 +54,12 @@ class HomePage extends StatelessWidget {
                     title: note.title,
                     subtitle: note.content,
                     date: note.lastEdited,
-                    onEdit: () {},
-                    onDelete: () {},
+                    onEdit: () {
+                      showUpdateNoteDialog(context, note.id);
+                    },
+                    onDelete: () {
+                      showDeleteNoteDialog(context, note.id);
+                    },
                   );
                 },
               ),
@@ -117,6 +121,93 @@ class HomePage extends StatelessWidget {
                 },
                 child: const Text(
                   "Agregar",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void showUpdateNoteDialog(BuildContext context, String id) {
+    final notesProvider = Provider.of<NotesProvider>(context, listen: false);
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController contentController = TextEditingController();
+    //TODO: Crear un form para validar las entradas para el titulo y el contenido
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Actualizar nota"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(hint: "Titulo", controller: titleController),
+                const SizedBox(height: 10),
+                CustomTextField(
+                  hint: "Contenido",
+                  controller: contentController,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Note noteToAdd = Note(
+                    id: DateTime.now().toString(),
+                    title: titleController.text,
+                    content: contentController.text,
+                    lastEdited: DateTime.now(),
+                  );
+                  notesProvider.updateNote(id, noteToAdd);
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Actualizar",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void showDeleteNoteDialog(BuildContext context, String id) {
+    final notesProvider = Provider.of<NotesProvider>(context, listen: false);
+    //TODO: Crear un form para validar las entradas para el titulo y el contenido
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Borrar nota"),
+            content: Text("Deseas eliminar definitivamente la nota?"),
+
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  notesProvider.deleteNote(id);
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Eliminar",
                   style: TextStyle(color: Colors.black),
                 ),
               ),
