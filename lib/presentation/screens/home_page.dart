@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/business/models/note_model.dart';
 import 'package:notes_app/business/providers/notes_provider.dart';
+import 'package:notes_app/presentation/screens/note_details_screen.dart';
 import 'package:notes_app/presentation/widgets/custom_list_card.dart';
 import 'package:notes_app/presentation/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
@@ -37,9 +38,15 @@ class HomePage extends StatelessWidget {
         builder: (context, noteProvider, child) {
           if (noteProvider.noteList.isEmpty) {
             return const Center(
-              child: Text(
-                "Tu bandeja de notas esta vacia.",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.note_add, size: 50, color: Colors.grey),
+                  Text(
+                    "No hay notas aún",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             );
           }
@@ -58,6 +65,14 @@ class HomePage extends StatelessWidget {
                   },
                   onDelete: () {
                     showDeleteNoteDialog(context, note.id);
+                  },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder:
+                            (context) => NoteDetailsScreen(currentNote: note),
+                      ),
+                    );
                   },
                 );
               },
@@ -201,7 +216,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void showDeleteNoteDialog(BuildContext context, String id) {
+  Future<void> showDeleteNoteDialog(BuildContext context, String id) async {
     final notesProvider = Provider.of<NotesProvider>(context, listen: false);
     showDialog(
       context: context,
