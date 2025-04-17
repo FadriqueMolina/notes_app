@@ -81,51 +81,57 @@ class HomePage extends StatelessWidget {
     final notesProvider = Provider.of<NotesProvider>(context, listen: false);
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     //TODO: Crear un form para validar las entradas para el titulo y el contenido
     showDialog(
       context: context,
 
       builder:
-          (context) => AlertDialog(
-            title: const Text("Agregar nota"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(hint: "Titulo", controller: titleController),
-                const SizedBox(height: 10),
-                CustomTextField(
-                  hint: "Contenido",
-                  controller: contentController,
+          (context) => Form(
+            key: formKey,
+            child: AlertDialog(
+              title: const Text("Agregar nota"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomTextField(hint: "Titulo", controller: titleController),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    hint: "Contenido",
+                    controller: contentController,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      Note noteToAdd = Note(
+                        id: DateTime.now().toString(),
+                        title: titleController.text,
+                        content: contentController.text,
+                        lastEdited: DateTime.now(),
+                      );
+                      notesProvider.addNote(noteToAdd);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text(
+                    "Agregar",
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Cancelar",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Note noteToAdd = Note(
-                    id: DateTime.now().toString(),
-                    title: titleController.text,
-                    content: contentController.text,
-                    lastEdited: DateTime.now(),
-                  );
-                  notesProvider.addNote(noteToAdd);
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Agregar",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
           ),
     );
   }
@@ -134,55 +140,61 @@ class HomePage extends StatelessWidget {
     final notesProvider = Provider.of<NotesProvider>(context, listen: false);
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     //TODO: Crear un form para validar las entradas para el titulo y el contenido
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: const Text("Actualizar nota"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(
-                  hint: "Titulo",
-                  controller: titleController,
-                  formerText: note.title,
+          (context) => Form(
+            key: formKey,
+            child: AlertDialog(
+              title: const Text("Actualizar nota"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomTextField(
+                    hint: "Titulo",
+                    controller: titleController,
+                    formerText: note.title,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    hint: "Contenido",
+                    controller: contentController,
+                    formerText: note.content,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-                const SizedBox(height: 10),
-                CustomTextField(
-                  hint: "Contenido",
-                  controller: contentController,
-                  formerText: note.content,
+                TextButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      Note noteToAdd = Note(
+                        id: DateTime.now().toString(),
+                        title: titleController.text,
+                        content: contentController.text,
+                        lastEdited: DateTime.now(),
+                      );
+                      notesProvider.updateNote(note.id, noteToAdd);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text(
+                    "Actualizar",
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Cancelar",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Note noteToAdd = Note(
-                    id: DateTime.now().toString(),
-                    title: titleController.text,
-                    content: contentController.text,
-                    lastEdited: DateTime.now(),
-                  );
-                  notesProvider.updateNote(note.id, noteToAdd);
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Actualizar",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
           ),
     );
   }

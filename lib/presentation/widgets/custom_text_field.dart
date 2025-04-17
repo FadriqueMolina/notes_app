@@ -34,14 +34,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
-      child: TextField(
+      child: TextFormField(
         controller: widget.controller,
-
         decoration: InputDecoration(
           hintText: widget.hint,
-
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
         ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Por favor ingresa un valor valido";
+          }
+          return null;
+        },
       ),
     );
   }
