@@ -123,6 +123,9 @@ class HomePage extends StatelessWidget {
                       );
                       notesProvider.addNote(noteToAdd);
                       Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("¡Nota agregada!")),
+                      );
                     }
                   },
                   child: const Text(
@@ -186,6 +189,9 @@ class HomePage extends StatelessWidget {
                       );
                       notesProvider.updateNote(note.id, noteToAdd);
                       Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("¡Nota actualizada!")),
+                      );
                     }
                   },
                   child: const Text(
