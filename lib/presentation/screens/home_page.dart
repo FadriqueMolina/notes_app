@@ -34,7 +34,6 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Consumer<NotesProvider>(
-        //Esto es funcional porque muestra el texto o la lista de elementos, pero me gustaria alguna alternativa con mejor visibilidad, que se pueda leer mejor (Probablemente un builder)
         builder: (context, noteProvider, child) {
           if (noteProvider.noteList.isEmpty) {
             return const Center(
@@ -43,28 +42,27 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             );
-          } else {
-            return Center(
-              child: ListView.builder(
-                itemCount: noteProvider.noteList.length,
-                itemBuilder: (context, index) {
-                  final note = noteProvider.noteList[index];
-
-                  return CustomListCard(
-                    title: note.title,
-                    subtitle: note.content,
-                    date: note.lastEdited,
-                    onEdit: () {
-                      showUpdateNoteDialog(context, note);
-                    },
-                    onDelete: () {
-                      showDeleteNoteDialog(context, note.id);
-                    },
-                  );
-                },
-              ),
-            );
           }
+          return Center(
+            child: ListView.builder(
+              itemCount: noteProvider.noteList.length,
+              itemBuilder: (context, index) {
+                final note = noteProvider.noteList[index];
+
+                return CustomListCard(
+                  title: note.title,
+                  subtitle: note.content,
+                  date: note.lastEdited,
+                  onEdit: () {
+                    showUpdateNoteDialog(context, note);
+                  },
+                  onDelete: () {
+                    showDeleteNoteDialog(context, note.id);
+                  },
+                );
+              },
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -82,7 +80,6 @@ class HomePage extends StatelessWidget {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController contentController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    //TODO: Crear un form para validar las entradas para el titulo y el contenido
     showDialog(
       context: context,
 
