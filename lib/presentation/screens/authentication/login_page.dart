@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/business/providers/auth_provider.dart';
+import 'package:notes_app/core/utils/helpers.dart';
 import 'package:notes_app/presentation/screens/authentication/register_page.dart';
 import 'package:notes_app/presentation/widgets/custom_elevated_button.dart';
 import 'package:notes_app/presentation/widgets/custom_text_field.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   final emailController = TextEditingController();
@@ -12,6 +15,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -60,10 +65,11 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(width: 5),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (context) => RegisterPage(),
                           ),
+                          (route) => false,
                         );
                       },
                       child: const Text(
@@ -80,9 +86,18 @@ class LoginPage extends StatelessWidget {
                 //Boton iniciar sesion
                 CustomElevatedButton(
                   text: "Iniciar sesion",
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      //Proceso de login
+                      String email = emailController.text.trim();
+                      String password = passwordController.text;
+
+                      await authProvider.login(email, password);
+                      if (authProvider.currentUser != null) {
+                        emailController.clear();
+                        passwordController.clear();
+                      } else {
+                        showGlobalSnackBar(authProvider.errorMessage);
+                      }
                     }
                   },
                 ),

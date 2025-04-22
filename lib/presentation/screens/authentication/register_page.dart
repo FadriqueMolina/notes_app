@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/business/providers/auth_provider.dart';
+import 'package:notes_app/core/utils/helpers.dart';
+import 'package:notes_app/presentation/screens/authentication/login_page.dart';
 import 'package:notes_app/presentation/widgets/custom_elevated_button.dart';
 import 'package:notes_app/presentation/widgets/custom_text_field.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   final emailController = TextEditingController();
@@ -12,6 +16,8 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -68,7 +74,10 @@ class RegisterPage extends StatelessWidget {
                     const SizedBox(width: 5),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false,
+                        );
                       },
                       child: const Text(
                         "Inicia sesion",
@@ -84,17 +93,27 @@ class RegisterPage extends StatelessWidget {
                 //Boton iniciar sesion
                 CustomElevatedButton(
                   text: "Registrarse",
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       if (passwordController.text ==
                           confirmPasswordController.text) {
+                        String email = emailController.text.trim();
+                        String password = passwordController.text;
+                        await authProvider.register(email, password);
+                        if (authProvider.currentUser != null) {
+                          //TODO: Fix bug usuario no es redirigido a home page despues de hacer sign up
+                          emailController.clear();
+                          passwordController.clear();
+                          confirmPasswordController.clear();
+                          showGlobalSnackBar(
+                            "El usuario fue creado exitosamente.",
+                          );
+                        } else {
+                          showGlobalSnackBar(authProvider.errorMessage);
+                        }
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Las contraseñas no coinciden, intenta de nuevo.",
-                            ),
-                          ),
+                        showGlobalSnackBar(
+                          "Las contraseñas no coinciden, intentelo de nuevo.",
                         );
                       }
                     }

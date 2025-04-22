@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/business/models/note_model.dart';
+import 'package:notes_app/business/providers/auth_provider.dart';
 import 'package:notes_app/business/providers/notes_provider.dart';
 import 'package:notes_app/presentation/screens/note_details_screen.dart';
 import 'package:notes_app/presentation/widgets/custom_list_card.dart';
@@ -11,6 +12,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -30,6 +32,13 @@ class HomePage extends StatelessWidget {
               //TODO: Accion para mostrar las notas en lista o en grid
             },
             icon: const Icon(Icons.list),
+            color: Colors.grey[700],
+          ),
+          IconButton(
+            onPressed: () {
+              authProvider.logout();
+            },
+            icon: const Icon(Icons.logout),
             color: Colors.grey[700],
           ),
         ],

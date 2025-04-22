@@ -29,7 +29,7 @@ class CustomElevatedButton extends StatelessWidget {
         shadowColor: Colors.black, // Color de la sombra
         textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         // Efecto al presionar
-        side: const BorderSide(width: 1), // Borde exterior
+        side: const BorderSide(), // Borde exterior
       ),
       child: Text(text),
     );
