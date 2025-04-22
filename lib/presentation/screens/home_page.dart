@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final notesProvider = Provider.of<NotesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -43,49 +44,47 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<NotesProvider>(
-        builder: (context, noteProvider, child) {
-          if (noteProvider.noteList.isEmpty) {
+      body: FutureBuilder(
+        future: notesProvider.fetchNotes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final notes = snapshot.data ?? [];
+          if (notes.isEmpty) {
             return const Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.note_add, size: 50, color: Colors.grey),
-                  Text(
-                    "No hay notas aún",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
+              child: Text(
+                "No hay notas agregadas...",
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             );
           }
-          return Center(
-            child: ListView.builder(
-              itemCount: noteProvider.noteList.length,
-              itemBuilder: (context, index) {
-                final note = noteProvider.noteList[index];
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              final note = notes[index];
 
-                return CustomListCard(
-                  title: note.title,
-                  subtitle: note.content,
-                  date: note.lastEdited,
-                  onEdit: () {
-                    showUpdateNoteDialog(context, note);
-                  },
-                  onDelete: () {
-                    showDeleteNoteDialog(context, note.id);
-                  },
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder:
-                            (context) => NoteDetailsScreen(currentNote: note),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+              return CustomListCard(
+                title: note.title,
+                subtitle: note.content,
+                date: note.lastEdited,
+                onEdit: () {
+                  showUpdateNoteDialog(context, note);
+                },
+                onDelete: () {
+                  showDeleteNoteDialog(context, note.id);
+                },
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (context) => NoteDetailsScreen(currentNote: note),
+                    ),
+                  );
+                },
+              );
+            },
           );
         },
       ),
@@ -137,7 +136,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       Note noteToAdd = Note(
-                        id: DateTime.now().toString(),
+                        id: "",
                         title: titleController.text,
                         content: contentController.text,
                         lastEdited: DateTime.now(),
