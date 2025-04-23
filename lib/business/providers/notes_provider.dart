@@ -16,7 +16,7 @@ class NotesProvider with ChangeNotifier {
           await _supabaseClient.from("notes").insert({
             "title": noteToAdd.title,
             "content": noteToAdd.content,
-            "user_id": user.id, // Añadir esto es crucial
+            "user_id": user.id,
             "last_edited": DateTime.now().toIso8601String(),
           }).select();
 
@@ -53,6 +53,7 @@ class NotesProvider with ChangeNotifier {
               .from("notes")
               .update(noteToUpdate.toJson())
               .eq("user_id", user.id)
+              .eq("id", id)
               .select();
 
       notifyListeners();
