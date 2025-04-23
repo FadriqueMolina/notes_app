@@ -3,6 +3,7 @@ import 'package:notes_app/business/models/note_model.dart';
 import 'package:notes_app/business/providers/auth_provider.dart';
 import 'package:notes_app/business/providers/notes_provider.dart';
 import 'package:notes_app/presentation/screens/note_details_screen.dart';
+import 'package:notes_app/presentation/screens/search_screen.dart';
 import 'package:notes_app/presentation/widgets/custom_list_card.dart';
 import 'package:notes_app/presentation/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,10 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              //TODO: Accion para abrir pagina para buscar notas
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
             },
             icon: Icon(Icons.search, color: Colors.grey[700]),
           ),

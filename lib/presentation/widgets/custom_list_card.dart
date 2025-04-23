@@ -5,18 +5,18 @@ class CustomListCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final DateTime date; // Added date field
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final VoidCallback onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onTap;
 
   const CustomListCard({
     super.key,
     required this.title,
     required this.subtitle,
     required this.date, // Required date
-    required this.onEdit,
-    required this.onDelete,
-    required this.onTap,
+    this.onEdit,
+    this.onDelete,
+    this.onTap,
   });
 
   @override

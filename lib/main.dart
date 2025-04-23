@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:notes_app/business/providers/auth_provider.dart';
 import 'package:notes_app/business/providers/notes_provider.dart';
+import 'package:notes_app/business/providers/search_provider.dart';
 import 'package:notes_app/presentation/screens/authentication/login_page.dart';
 import 'package:notes_app/presentation/screens/home_page.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => NotesProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => SearchProvider()),
       ],
       child: const MainApp(),
     ),
